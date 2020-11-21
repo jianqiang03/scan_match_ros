@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<launch>
+
+    <param name="use_sim_time" value="true"/>       <!-- To use the rosbag time -->
+
+    <param name="cpt_no_change_val" value="2" />    <!-- (nb iteration) the test the Nelder and Mead result (convergence) -->
+    <param name="watchdog"          value="50" />   <!-- (nb iteration) to limit the Nelder and Mead iterations -->
+
+    <param name="nb_ite_max" value="10" />          <!-- (nb iteration) To use the rosbag time -->
+
+    <param name="resolution" value="0.05" />        <!-- (meters) size of a cell -->
+    <param name="height" value="30" />              <!-- (meters) maximal height of the map -->
+    <param name="width" value="30" />               <!-- (meters) maximal wdith of the map -->
+
+    <param name="max_belief" value="100" />         <!-- (belief) maximal value for a cell of the probability map -->
+    <param name="min_belief" value="0" />           <!-- (belief) minimal value for a cell of probability map -->
+    <param name="add_belief" value="25" />          <!-- (belief) value to add when detecting an obstacle -->
+    <param name="rem_belief" value="10" />          <!-- (belief) value to remove when removing an obstacle -->
+    <param name="threshold_belief" value="50" />    <!-- (belief) threshold to decide if a cell is an obstacle or not -->
+
+    <param name="scan_topic_name" value="/scan" />              <!-- (string) name of the LiDAR topic -->
+    <param name="path_topic_name" value="/scan_match/path" />       <!-- (string) name the topic to publish the path -->
+    <param name="probmap_topic_name" value="/scan_match/probmap" /> 
+
+    <param name="base_link_name" value="paslam_baselink" /> <!-- (string) the name of the base link (frame) -->
+    <param name="map_link_name" value="map_baselink" />  <!-- (string) the name of the map link (frame) -->
+    <param name="lidar_link_name" value="laser" />          <!-- (string) the name of the LiDAR link (frame) -->
+
+    <param name="map_publishing_rate" value="100" />    <!-- (nb iterations) number of needed LiDAR data processed before publishing the map -->
+    <param name="path_publishing_rate" value="10" />    <!-- (nb iterations) number of needed LiDAR data processed before publishing the path -->
+    <param name="publish_lidar_pose_tf" value="true" /> <!-- (bool) enable/disable to publish the transform based on the computed pose -->
+
+
+    <!-- NODES -->
+
+    <!-- The SLAM node -->
+    <node name="scan_match_node" type= "scan_match_node" pkg="scan_match" output="screen" />
+
+    <!-- The rviz node with the demo configuration -->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find scan_match)/rviz/demo.rviz">
+    </node>
+
+    <!-- To play the rosbag
+        clock option to publish the simulation clock
+        keep-alive option not to close the rosbag at the end (needed for the clock)-->
+    <node pkg="rosbag" type="play" name="demo" args="--clock --keep-alive $(find scan_match)/rosbag/demo.bag" />
+
+</launch>

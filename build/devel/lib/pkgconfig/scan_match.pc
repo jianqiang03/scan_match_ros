@@ -1,0 +1,8 @@
+prefix=/home/jianqiang/csm_ws/src/scan_match/build/devel
+
+Name: scan_match
+Description: Description of scan_match
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

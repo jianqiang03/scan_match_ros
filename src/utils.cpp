@@ -1,4 +1,4 @@
-#include <scan_match/utils.h>
+#include "utils.h"
 
 SearchParameters::SearchParameters(const double linear_search_window,
                                    const double angular_search_window,

@@ -1,21 +1,15 @@
-#include <scan_match/scan_match.h>
+#include "scan_match.h"
 
-ScanMatch::ScanMatch(double linear_search_window_, double angular_search_window_,
-                     double resolution_, int width_, int height_)
+ScanMatch::ScanMatch(double linear_search_window_, double angular_search_window_)
             :linear_search_window(linear_search_window_),
-             angular_search_window(angular_search_window_)
-{
-    map.info.resolution = resolution_;
-    map.info.width = width_;
-    map.info.height = height_;
-    map.data.resize(width_ * height_);
-}
+             angular_search_window(angular_search_window_) {}
 
-double ScanMatch::MatchBruteForce(const geometry_msgs::Pose2D& initial_pose,
-                       const PointCloud& point_cloud,
-                       geometry_msgs::Pose2D& pose_estimated)
+geometry_msgs::Pose2D ScanMatch::MatchBruteForce(const geometry_msgs::Pose2D& initial_pose,
+                                                 const PointCloud& point_cloud)
 {
-    Eigen::AngleAxisd init_r_vector(initial_pose.theta, Eigen::Vector3d(0, 0, 1)); //rotate theta around z
+    
+    Eigen::AngleAxisd init_r_vector(initial_pose.theta, Eigen::Vector3d(0, 0, 1));
+    
     Eigen::Quaterniond initial_rotation(init_r_vector);
 
     PointCloud rotated_cloud = RotatePointCloud(point_cloud, initial_rotation);
@@ -31,12 +25,14 @@ double ScanMatch::MatchBruteForce(const geometry_msgs::Pose2D& initial_pose,
     ScoreCandidates(discrete_scans, search_parameters, &candidates);
 
     const Candidate& best_candidate = *std::max_element(candidates.begin(), candidates.end());
+    
+    geometry_msgs::Pose2D pose_estimated;
 
     pose_estimated.x = initial_pose.x + best_candidate.x;
     pose_estimated.y = initial_pose.y + best_candidate.y;
     pose_estimated.theta = initial_pose.theta + best_candidate.orientation;
 
-    return best_candidate.score;
+    return pose_estimated;
 }
 
 PointCloud ScanMatch::RotatePointCloud(const PointCloud& in_cloud, const Eigen::Quaterniond& rotation)
@@ -53,7 +49,7 @@ std::vector<PointCloud> ScanMatch::GenerateSans(const PointCloud& point_cloud, c
     std::vector<PointCloud> scans;
     scans.reserve(search_parameters.num_scans);
     double delta_theta = -search_parameters.num_angular_steps * search_parameters.angular_step_size;
-    for(int i=0; i < scans.size(); ++i, delta_theta += search_parameters.angular_step_size) {
+    for(int i=0; i < search_parameters.num_scans; ++i, delta_theta += search_parameters.angular_step_size) {
         scans.push_back(RotatePointCloud(point_cloud, Eigen::Quaterniond(Eigen::AngleAxisd(delta_theta, Eigen::Vector3d(0, 0, 1)))));
     }
     return scans;
@@ -105,7 +101,9 @@ std::vector<Candidate> ScanMatch::GenerateCandidates(const SearchParameters& sea
     return candidates;
 }
 
-void ScanMatch::ScoreCandidates(const std::vector<std::vector<Eigen::Array2i>>& scans, const SearchParameters& search_parameters, std::vector<Candidate>* candidates)
+void ScanMatch::ScoreCandidates(const std::vector<std::vector<Eigen::Array2i>>& scans,
+                                const SearchParameters& search_parameters,
+                                std::vector<Candidate>* candidates)
 {
     for(Candidate& candidate : *candidates) {
         candidate.score = ComputeScore(scans[candidate.scan_index], candidate.x_offset, candidate.y_offset);
@@ -130,4 +128,25 @@ float ScanMatch::getProbability(int cx, int cy)
     if(cx < 0 || cx >= map.info.width || cy < 0 || cy >= map.info.height)
         return -1;
     return static_cast<float>(map.data[cx + cy * map.info.width]) / 100;
+}
+
+PointCloud ScanMatch::ScanToCloud(const sensor_msgs::LaserScan& scan)
+{
+    PointCloud point_cloud;
+    double angle = scan.angle_min;
+    double obs_x, obs_y;
+    std::vector<float>::const_iterator it_msr;
+    
+    for(it_msr=scan.ranges.begin(); it_msr!=scan.ranges.end(); ++it_msr){
+        if(*it_msr == 0 || *it_msr >= INFINITY || *it_msr < 0.2f || *it_msr >= 100.0f){
+            continue;
+        }
+        else{
+            obs_x = (*it_msr) * cos(angle);
+            obs_y = (*it_msr) * sin(angle);
+            point_cloud.push_back(Eigen::Vector3d(obs_x, obs_y, 0));
+        }
+        angle += scan.angle_increment;
+    }
+    return point_cloud;
 }
