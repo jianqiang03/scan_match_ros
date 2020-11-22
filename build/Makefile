@@ -168,6 +168,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named scan_match_node_test
+
+# Build rule for target.
+scan_match_node_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 scan_match_node_test
+.PHONY : scan_match_node_test
+
+# fast build rule for target.
+scan_match_node_test/fast:
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/build
+.PHONY : scan_match_node_test/fast
+
+#=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -831,19 +844,6 @@ dynamic_reconfigure_generate_messages_eus/fast:
 .PHONY : dynamic_reconfigure_generate_messages_eus/fast
 
 #=============================================================================
-# Target rules for targets named scan_match_node
-
-# Build rule for target.
-scan_match_node: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 scan_match_node
-.PHONY : scan_match_node
-
-# fast build rule for target.
-scan_match_node/fast:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/build
-.PHONY : scan_match_node/fast
-
-#=============================================================================
 # Target rules for targets named std_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -1317,7 +1317,7 @@ src/scan_match.o: src/scan_match.cpp.o
 
 # target to build an object file
 src/scan_match.cpp.o:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match.cpp.o
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match.cpp.o
 .PHONY : src/scan_match.cpp.o
 
 src/scan_match.i: src/scan_match.cpp.i
@@ -1326,7 +1326,7 @@ src/scan_match.i: src/scan_match.cpp.i
 
 # target to preprocess a source file
 src/scan_match.cpp.i:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match.cpp.i
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match.cpp.i
 .PHONY : src/scan_match.cpp.i
 
 src/scan_match.s: src/scan_match.cpp.s
@@ -1335,35 +1335,35 @@ src/scan_match.s: src/scan_match.cpp.s
 
 # target to generate assembly for a file
 src/scan_match.cpp.s:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match.cpp.s
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match.cpp.s
 .PHONY : src/scan_match.cpp.s
 
-src/scan_match_node.o: src/scan_match_node.cpp.o
+src/scan_match_node_test.o: src/scan_match_node_test.cpp.o
 
-.PHONY : src/scan_match_node.o
+.PHONY : src/scan_match_node_test.o
 
 # target to build an object file
-src/scan_match_node.cpp.o:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match_node.cpp.o
-.PHONY : src/scan_match_node.cpp.o
+src/scan_match_node_test.cpp.o:
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match_node_test.cpp.o
+.PHONY : src/scan_match_node_test.cpp.o
 
-src/scan_match_node.i: src/scan_match_node.cpp.i
+src/scan_match_node_test.i: src/scan_match_node_test.cpp.i
 
-.PHONY : src/scan_match_node.i
+.PHONY : src/scan_match_node_test.i
 
 # target to preprocess a source file
-src/scan_match_node.cpp.i:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match_node.cpp.i
-.PHONY : src/scan_match_node.cpp.i
+src/scan_match_node_test.cpp.i:
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match_node_test.cpp.i
+.PHONY : src/scan_match_node_test.cpp.i
 
-src/scan_match_node.s: src/scan_match_node.cpp.s
+src/scan_match_node_test.s: src/scan_match_node_test.cpp.s
 
-.PHONY : src/scan_match_node.s
+.PHONY : src/scan_match_node_test.s
 
 # target to generate assembly for a file
-src/scan_match_node.cpp.s:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/scan_match_node.cpp.s
-.PHONY : src/scan_match_node.cpp.s
+src/scan_match_node_test.cpp.s:
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/scan_match_node_test.cpp.s
+.PHONY : src/scan_match_node_test.cpp.s
 
 src/utils.o: src/utils.cpp.o
 
@@ -1371,7 +1371,7 @@ src/utils.o: src/utils.cpp.o
 
 # target to build an object file
 src/utils.cpp.o:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/utils.cpp.o
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/utils.cpp.o
 .PHONY : src/utils.cpp.o
 
 src/utils.i: src/utils.cpp.i
@@ -1380,7 +1380,7 @@ src/utils.i: src/utils.cpp.i
 
 # target to preprocess a source file
 src/utils.cpp.i:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/utils.cpp.i
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/utils.cpp.i
 .PHONY : src/utils.cpp.i
 
 src/utils.s: src/utils.cpp.s
@@ -1389,7 +1389,7 @@ src/utils.s: src/utils.cpp.s
 
 # target to generate assembly for a file
 src/utils.cpp.s:
-	$(MAKE) -f CMakeFiles/scan_match_node.dir/build.make CMakeFiles/scan_match_node.dir/src/utils.cpp.s
+	$(MAKE) -f CMakeFiles/scan_match_node_test.dir/build.make CMakeFiles/scan_match_node_test.dir/src/utils.cpp.s
 .PHONY : src/utils.cpp.s
 
 # Help Target
@@ -1403,6 +1403,7 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... test"
+	@echo "... scan_match_node_test"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_eus"
 	@echo "... tf2_msgs_generate_messages_cpp"
@@ -1456,7 +1457,6 @@ help:
 	@echo "... tf2_msgs_generate_messages_py"
 	@echo "... actionlib_generate_messages_py"
 	@echo "... dynamic_reconfigure_generate_messages_eus"
-	@echo "... scan_match_node"
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... bond_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_py"
@@ -1496,9 +1496,9 @@ help:
 	@echo "... src/scan_match.o"
 	@echo "... src/scan_match.i"
 	@echo "... src/scan_match.s"
-	@echo "... src/scan_match_node.o"
-	@echo "... src/scan_match_node.i"
-	@echo "... src/scan_match_node.s"
+	@echo "... src/scan_match_node_test.o"
+	@echo "... src/scan_match_node_test.i"
+	@echo "... src/scan_match_node_test.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"
