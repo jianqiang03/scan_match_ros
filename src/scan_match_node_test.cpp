@@ -155,8 +155,12 @@ int main(int argc, char** argv)
         cloud_pub.publish(pub_points);
         pose_pub.publish(pub_pose);
         
+        //std::vector<nav_msgs::OccupancyGrid> maps = pcsm->GenerateLookUpTables(map);
+        //nav_msgs::OccupancyGrid new_map = pcsm->CompressMap(map, 4);
         
-        ROS_INFO("The estimated pose is (x: %2.1f y: %2.1f theta: %2.1f)", (float)pose_2.x, (float)pose_2.y, (float)pose_2.theta);
+        //ROS_INFO("pose 3 is %2.1f", (float)pose_);
+        
+       ROS_INFO("The estimated pose is (x: %2.1f y: %2.1f theta: %2.1f)", (float)pose_2.x, (float)pose_2.y, (float)pose_2.theta);
 
         ros::spinOnce();
 

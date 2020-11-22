@@ -30,17 +30,7 @@ public:
                                                const geometry_msgs::Pose2D& initial_pose, 
                                                const PointCloud& point_cloud, 
                                                float min_score);
-    
-/**    
-    void updateMap(const nav_msgs::OccupancyGrid& map_) {
-        map = map_;
-    }
 
-    nav_msgs::OccupancyGrid getMap() {
-        return map;
-    }
-**/
-private:
 
     PointCloud RotatePointCloud(const PointCloud& in_cloud, const Eigen::Quaterniond& rotation);
 

@@ -214,18 +214,20 @@ nav_msgs::OccupancyGrid ScanMatch::CompressMap(const nav_msgs::OccupancyGrid& ma
     low_resolution_map.info.origin.position.y = -(low_resolution_map.info.height * 
                                             low_resolution_map.info.resolution) / 2;
     low_resolution_map.data.resize(low_resolution_map.info.width * low_resolution_map.info.height);
-    
+        
     std::unordered_map<int, std::vector<int>> id_x;
     std::unordered_map<int, std::vector<int>> id_y;
     
     for(int x = 0; x < map.info.width; ++x) {
-        for(int y = 0; y < map.info.height; ++y) {
-            int x_index = x / size;
-            int y_index = y / size;
-            id_x[x_index].push_back(x);
-            id_y[y_index].push_back(y);
-        }
+        int x_index = x / size;
+        id_x[x_index].push_back(x);
     }
+    
+    for(int y = 0; y < map.info.height; ++y) {
+        int y_index = y / size;
+        id_y[y_index].push_back(y);
+    }
+//    ROS_INFO("idx size is %f", (float)id_x[1][0]);
     
     for(int cx = 0; cx < low_resolution_map.info.width; ++cx) {
         for(int cy = 0; cy < low_resolution_map.info.height; ++cy) {
