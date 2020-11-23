@@ -147,7 +147,7 @@ int main(int argc, char** argv)
         pub_pose.pose.position.y = pose_2.y;
         pub_pose.pose.position.z = 0;
         
-        //geometry_msgs::Pose2D pose_3 = pcsm->MatchMultiResolution(map, pose_1, point_cloud_2, 0.1);
+        geometry_msgs::Pose2D pose_3 = pcsm->MatchMultiResolution(map, pose_1, point_cloud_2, 0.0);
 
         map.header.frame_id = "map";
 
@@ -155,12 +155,13 @@ int main(int argc, char** argv)
         cloud_pub.publish(pub_points);
         pose_pub.publish(pub_pose);
         
-        //std::vector<nav_msgs::OccupancyGrid> maps = pcsm->GenerateLookUpTables(map);
+        std::vector<nav_msgs::OccupancyGrid> maps = pcsm->GenerateLookUpTables(map);
         //nav_msgs::OccupancyGrid new_map = pcsm->CompressMap(map, 4);
         
         //ROS_INFO("pose 3 is %2.1f", (float)pose_);
         
-       ROS_INFO("The estimated pose is (x: %2.1f y: %2.1f theta: %2.1f)", (float)pose_2.x, (float)pose_2.y, (float)pose_2.theta);
+        
+        ROS_INFO("The estimated pose is (x: %2.1f y: %2.1f theta: %2.1f)", (float)pose_3.x, (float)pose_3.y, (float)pose_3.theta);
 
         ros::spinOnce();
 

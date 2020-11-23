@@ -52,12 +52,16 @@ geometry_msgs::Pose2D ScanMatch::MatchMultiResolution(const nav_msgs::OccupancyG
     
     std::vector<nav_msgs::OccupancyGrid> maps = GenerateLookUpTables(map);
     
+    SearchParameters s1(linear_search_window, angular_search_window, point_cloud, maps[0].info.resolution);
+    
+    double angular_step_size = s1.angular_step_size;
+    
     std::vector<SearchParameters> search_parameters;
     search_parameters.reserve(branch_and_bound_depth);
     
     for(int i=0; i < branch_and_bound_depth; ++i) {
         search_parameters.emplace_back(linear_search_window, angular_search_window,
-                                       point_cloud, maps[i].info.resolution);
+                                       angular_step_size, maps[i].info.resolution);
     }
 
     std::vector<PointCloud> scans = GenerateSans(rotated_cloud, search_parameters.back());
@@ -257,7 +261,7 @@ Candidate ScanMatch::BranchAndBound(const std::vector<nav_msgs::OccupancyGrid>& 
         return *candidates.begin();
     }
     
-    Candidate best_candidate(0, 0, 0, search_parameters[candidate_depth]);
+    Candidate best_candidate(0, 0, 0, search_parameters[0]);
     best_candidate.score = min_score;
     
     for(const Candidate& candidate : candidates) {
@@ -271,11 +275,11 @@ Candidate ScanMatch::BranchAndBound(const std::vector<nav_msgs::OccupancyGrid>& 
                 higher_resolution_candidates.emplace_back(candidate.scan_index, 
                                                           2 * candidate.x_offset + x,
                                                           2 * candidate.y_offset + y,
-                                                          search_parameters[candidate_depth]);
+                                                          search_parameters[candidate_depth-1]);
             }
         }
         
-        ScoreCandidates(maps[candidate_depth-1], discrete_scans[candidate_depth-1], search_parameters[candidate_depth], higher_resolution_candidates);
+        ScoreCandidates(maps[candidate_depth-1], discrete_scans[candidate_depth-1], search_parameters[candidate_depth-1], higher_resolution_candidates);
         
         best_candidate = std::max(best_candidate, BranchAndBound(maps, discrete_scans, search_parameters, higher_resolution_candidates, candidate_depth-1, best_candidate.score));
     }

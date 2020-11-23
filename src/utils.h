@@ -61,7 +61,10 @@ struct SearchParameters {
   };
 
   SearchParameters(double linear_search_window, double angular_search_window,
-                   const PointCloud& point_cloud, double resolution);
+                   const PointCloud& point_cloud, double resolution_);
+  
+  SearchParameters(double linear_search_window, double angular_search_window,
+                   const double angular_step_size_, double resolution_);
 
   int num_angular_steps;
   double angular_step_size;
